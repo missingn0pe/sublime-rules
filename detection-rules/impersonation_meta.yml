@@ -142,6 +142,13 @@ source: |
               .name == "urgency"
       )
     )
+    or sender.display_name is null
+      and (
+          any(beta.ml_topic(body.html.display_text).topics,
+              .name == "Legal and Compliance" and .confidence in ("medium", "high")
+          )
+      and regex.icontains(body.current_thread.text, "(Facebook|Meta|Instagram|Threads)")
+    )
   )
   and sender.email.domain.root_domain not in~ (
     'facebook.com',
